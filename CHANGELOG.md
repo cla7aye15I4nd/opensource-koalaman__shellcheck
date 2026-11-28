@@ -1,25 +1,42 @@
 ## Git
 ### Added
 - Add `--files-from` option to read input files from a file
-- Add `extended-analysis=local` directive/flag to run dataflow analysis
+- Add `--extended-analysis=local` directive/flag to run dataflow analysis
   on the current script only, without considering any `source`d includes.
+- `--list-optional` now lists the SC error code for optional checks
 - Support EditorConfig `shellcheck.*` keys
-- SC2337: warn about `grep -q` in pipelines under pipefail
+- SC2336: Suggest `cp -R` over implementation specific `cp -r`
+- SC2337: Warn about `grep -q` in pipelines under pipefail
 - SC2338: Optionally suggest `[[ x == y ]]` over `[[ x = y ]]`
   (bash `require-double-equals`)
 - SC2339/SC2340/SC2341/SC3426: Improved exit/return validation across shells
 
 ### Changed
+- SC2024/SC2232: sudo redirection/builtin now also apply to doas and run0
+- SC2114/SC2115: Unintentional `rm` warning now also triggers on globs like
+  `rm /bin/*$empty*` and non-canonical paths like `rm -rf /home/foo/$empty/..`
+- SC2236/SC2237: warning for negated -n/-z in `[ ]` now also triggers for `test`
+- SC2312: `cmd || echo ..` is now considered handling failure
 - SC3040: Support `pipefail` as specified in POSIX.1-2024
 
 ### Fixed
+- `|&` now parses correctly as coprocess separator it Ksh
+- Malformed shebangs retain warnings, but are no longer counted as shebangs
+- `json1` output no longer contains duplicates instances of warnings
 - SC1072 about an invalid `disable=` value now names the value instead
   of a missing `=`
-- SC2064 no longer warns about expanding readonly variables in trap commands
-- SC2114/SC2115 now also trigger on non-canonical paths such as
-  `rm -rf /./etc` or `rm -rf /etc/../etc`
-- SC2317 no longer reports commands as unreachable when a `case` catch-all
+- SC2031: No longer warns that assignments to `_` may be lost in a subshell
+- SC2034: Unused variables no longer warn when `allexport` is enabled
+- SC2035: Unprotected globs no longer warn when `noglob` is enabled
+- SC2064: readonly variables no longer warn about expanding in `trap`
+- SC2147: Check for tilde in $PATH now also triggers for declare/local/export
+- SC2164: Status of `cd` is considered handled when returned from a function
+- SC2178: Overwriting built-in bash arrays no longer warns in non-bash shells
+- SC2185: `find -files0-from` no longer triggers check about missing path
+- SC2218: Won't trigger on `bats` tests invoking functions defined later
+- SC2317: No longer reports commands as unreachable when a `case` catch-all
   is followed by `;;&` and a non-default final clause
+- SC3001: busybox sh now considered to support `<(process substitution)`
 
 ### Removed
 - SC3003: removed since ANSI C string is specified in POSIX.1-2024
